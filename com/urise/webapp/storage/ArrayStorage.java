@@ -2,6 +2,8 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
@@ -10,20 +12,44 @@ public class ArrayStorage {
     private int size = 0;
 
     public void clear() {
-        for (int i = 0; i < storage.length; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, null);
         size = 0;
     }
 
+    public void update(Resume r){
+        for (int i = 0; i < size; i++) {
+            if(checkEquals(storage[i].getUuid(), r.getUuid())) {
+                storage[i] = r;
+            }
+        }
+    }
+
     public void save(Resume r) {
+        if (size > storage.length) {
+            System.out.println("Error: overstack storage");
+            return;
+        }
+        if (r == null) {
+            System.out.println("Error: null resume");
+            return;
+        }
+        if (r.getUuid() == null) {
+            System.out.println("Error: null uuid");
+            return;
+        }
+        for (int i = 0; i < size; i++) {
+            if (checkEquals(storage[i].getUuid(), r.getUuid())) {
+                System.out.println("Error: not unique resume");
+                return;
+            }
+        }
         storage[size] = r;
         size++;
     }
 
     public Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid() == uuid) {
+            if (checkEquals(storage[i].getUuid(), uuid)) {
                 return storage[i];
             }
         }
@@ -33,7 +59,7 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = 0;
         for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid() == uuid) {
+            if (checkEquals(storage[i].getUuid(), uuid)) {
                 index = i;
             }
         }
@@ -47,15 +73,14 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] result = new Resume[size];
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null)
-                result[i] = storage[i];
-        }
-        return result;
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     public int size() {
         return size;
+    }
+
+    private boolean checkEquals(String uuid1, String uuid2) {
+        return uuid1.equals(uuid2);
     }
 }
