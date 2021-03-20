@@ -20,11 +20,11 @@ public class ArrayStorage {
         int index = findElementIndex(resume.getUuid());
         if (index >= 0) {
             storage[index] = resume;
+            System.out.println(resume.getUuid() + " updated");
         }
     }
 
     public void save(Resume resume) {
-        int index = findElementIndex(resume.getUuid()) + 1;
         if (size > storage.length) {
             System.out.println("Error: overstack storage");
             return;
@@ -34,7 +34,7 @@ public class ArrayStorage {
             return;
         }
         if (findElementIndex(resume.getUuid()) >= 0){
-            System.out.println("Error: " + index + " not unique resume");
+            System.out.println("Error: " + resume.getUuid() + " not unique resume");
             return;
         }
         storage[size] = resume;
@@ -43,12 +43,17 @@ public class ArrayStorage {
 
     public Resume get(String uuid) {
         int index = findElementIndex(uuid);
-        return index >= 0 ? storage[index] : null;
+        if (index == -1) {
+            System.out.println("Error: " + uuid + " not found");
+            return null;
+        }
+        return storage[index];
     }
 
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
         if (size - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - index);
+        System.out.println(uuid + " deleted");
         size--;
     }
 
