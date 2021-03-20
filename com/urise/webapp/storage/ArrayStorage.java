@@ -8,66 +8,63 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10_000];
     private int size = 0;
 
     public void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public void update(Resume r){
-        for (int i = 0; i < size; i++) {
-            if(checkEquals(storage[i].getUuid(), r.getUuid())) {
-                storage[i] = r;
-            }
+    public void update(Resume resume) {
+        int index = findElementIndex(resume.getUuid());
+        if (index >= 0) {
+            storage[index] = resume;
         }
     }
 
-    public void save(Resume r) {
+    public void save(Resume resume) {
         if (size > storage.length) {
             System.out.println("Error: overstack storage");
             return;
         }
-        if (r == null) {
+        if (resume == null) {
             System.out.println("Error: null resume");
             return;
         }
-        if (r.getUuid() == null) {
+        if (resume.getUuid() == null) {
             System.out.println("Error: null uuid");
             return;
         }
-        for (int i = 0; i < size; i++) {
-            if (checkEquals(storage[i].getUuid(), r.getUuid())) {
-                System.out.println("Error: not unique resume");
-                return;
-            }
+        if (findElementIndex(resume.getUuid()) >= 0){
+            System.out.println("Error: not unique resume");
+            return;
         }
-        storage[size] = r;
+        storage[size] = resume;
         size++;
     }
 
     public Resume get(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (checkEquals(storage[i].getUuid(), uuid)) {
-                return storage[i];
-            }
-        }
-        return null;
+        int index = findElementIndex(uuid);
+        return index >= 0 ? storage[index] : null;
     }
 
     public void delete(String uuid) {
-        int index = 0;
-        for (int i = 0; i < size; i++) {
-            if (checkEquals(storage[i].getUuid(), uuid)) {
-                index = i;
-            }
-        }
+        int index = findElementIndex(uuid);
         for (int i = index; i < size; i++) {
             storage[i] = storage[i+1];
         }
         size--;
     }
+//        int index = 0;
+//        for (int i = 0; i < size; i++) {
+//            if (checkEquals(storage[i].getUuid(), uuid)) {
+//                index = i;
+//            }
+//        }
+//        if (size - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - index);
+//        size--;
+//    }
 
     /**
      * @return array, contains only Resumes in storage (without null)
@@ -80,7 +77,12 @@ public class ArrayStorage {
         return size;
     }
 
-    private boolean checkEquals(String uuid1, String uuid2) {
-        return uuid1.equals(uuid2);
+    private int findElementIndex(String uuid) {
+        for (int i = 0; i < size; i++){
+            if (storage[i].getUuid().equals(uuid)){
+                return i;
+            }
+        }
+        return -1;
     }
 }
