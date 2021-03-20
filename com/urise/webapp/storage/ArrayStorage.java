@@ -29,10 +29,6 @@ public class ArrayStorage {
             System.out.println("Error: overstack storage");
             return;
         }
-        if (resume == null) {
-            System.out.println("Error: null resume");
-            return;
-        }
         if (resume.getUuid() == null) {
             System.out.println("Error: null uuid");
             return;
@@ -52,9 +48,7 @@ public class ArrayStorage {
 
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
-        for (int i = index; i < size; i++) {
-            storage[i] = storage[i+1];
-        }
+        if (size - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
     }
 
