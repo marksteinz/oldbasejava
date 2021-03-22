@@ -26,8 +26,12 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        if (size > storage.length) {
+        if (size >= storage.length) {
             System.out.println("Error: overflow storage");
+            return;
+        }
+        if (resume == null) {
+            System.out.println("Error: null resume");
             return;
         }
         if (resume.getUuid() == null) {
@@ -54,7 +58,7 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
         if (index >= 0) {
-            if (size - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - index);
+            if (size - 1 - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
             size--;
         } else {
             System.out.println("Error: " + uuid + " not found");
