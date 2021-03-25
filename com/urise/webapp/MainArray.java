@@ -1,7 +1,7 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ArrayStorage;
+import com.urise.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,8 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+//    private final static ArrayStorage SORTED_ARRAY_STORAGE = new ArrayStorage();
+    static final SortedArrayStorage SORTED_ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -33,29 +34,29 @@ public class MainArray {
                     printAll();
                     break;
                 case "size":
-                    System.out.println(ARRAY_STORAGE.size());
+                    System.out.println(SORTED_ARRAY_STORAGE.size());
                     break;
                 case "save":
                     resume = new Resume();
                     resume.setUuid(uuid);
-                    ARRAY_STORAGE.save(resume);
+                    SORTED_ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
                 case "update":
                     resume = new Resume();
                     resume.setUuid(uuid);
-                    ARRAY_STORAGE.update(resume);
+                    SORTED_ARRAY_STORAGE.update(resume);
                     printAll();
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
+                    SORTED_ARRAY_STORAGE.delete(uuid);
                     printAll();
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    System.out.println(SORTED_ARRAY_STORAGE.get(uuid));
                     break;
                 case "clear":
-                    ARRAY_STORAGE.clear();
+                    SORTED_ARRAY_STORAGE.clear();
                     printAll();
                     break;
                 case "exit":
@@ -68,7 +69,7 @@ public class MainArray {
     }
 
     static void printAll() {
-        Resume[] all = ARRAY_STORAGE.getAll();
+        Resume[] all = SORTED_ARRAY_STORAGE.getAll();
         System.out.println("----------------------------");
         if (all.length == 0) {
             System.out.println("Empty");

@@ -6,32 +6,26 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
 
-    @Override
-    public void clear() {
-
-    }
-
-    @Override
-    public void update(Resume resume) {
-
-    }
-
-    @Override
     public void save(Resume resume) {
-
+        int index = findElementIndex(resume.getUuid());
+        if (size >= storage.length) {
+            System.out.println("Error: overflow storage");
+            return;
+        }
+        if (resume.getUuid() == null) {
+            System.out.println("Error: null uuid");
+            return;
+        }
+        if (findElementIndex(resume.getUuid()) >= 0) {
+            System.out.println("Error: " + resume.getUuid() + " not unique resume");
+        } else {
+            index = -index - 1;
+            System.arraycopy(storage, index, storage, index + 1, size - index);
+            storage[index] = resume;
+            size++;
+        }
     }
 
-    @Override
-    public void delete(String uuid) {
-
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return new Resume[0];
-    }
-
-    @Override
     protected int findElementIndex(String uuid) {
         Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
