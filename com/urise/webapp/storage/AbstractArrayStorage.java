@@ -14,6 +14,24 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
+    public void save(Resume resume) {
+        int index = findElementIndex(resume.getUuid());
+        if (size >= storage.length) {
+            System.out.println("Error: overflow storage");
+            return;
+        }
+        if (resume.getUuid() == null) {
+            System.out.println("Error: null uuid");
+            return;
+        }
+        if (findElementIndex(resume.getUuid()) >= 0) {
+            System.out.println("Error: " + resume.getUuid() + " not unique resume");
+            return;
+        }
+        insertElementIndex(resume, index);
+        size++;
+    }
+
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
@@ -50,6 +68,8 @@ public abstract class AbstractArrayStorage implements Storage {
         System.out.println("Error: " + uuid + " not found");
         return null;
     }
+
+    protected abstract void insertElementIndex(Resume resume, int index);
 
     protected abstract int findElementIndex(String uuid);
 }

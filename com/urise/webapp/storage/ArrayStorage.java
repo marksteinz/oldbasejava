@@ -7,25 +7,9 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void save(Resume resume) {
-        if (size >= storage.length) {
-            System.out.println("Error: overflow storage");
-            return;
-        }
-        if (resume == null) {
-            System.out.println("Error: null resume");
-            return;
-        }
-        if (resume.getUuid() == null) {
-            System.out.println("Error: null uuid");
-            return;
-        }
-        if (findElementIndex(resume.getUuid()) >= 0) {
-            System.out.println("Error: " + resume.getUuid() + " not unique resume");
-            return;
-        }
+    @Override
+    protected void insertElementIndex(Resume resume, int index) {
         storage[size] = resume;
-        size++;
     }
 
     protected int findElementIndex(String uuid) {
