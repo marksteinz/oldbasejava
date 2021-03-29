@@ -12,6 +12,7 @@ public class ArrayStorage extends AbstractArrayStorage {
         storage[size] = resume;
     }
 
+    @Override
     protected int findElementIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
