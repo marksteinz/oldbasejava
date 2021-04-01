@@ -38,13 +38,11 @@ public class MainArray {
                     break;
                 case "save":
                     resume = new Resume();
-                    resume.setUuid(uuid);
                     ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
                 case "update":
                     resume = new Resume();
-                    resume.setUuid(uuid);
                     ARRAY_STORAGE.update(resume);
                     printAll();
                     break;
