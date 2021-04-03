@@ -4,6 +4,7 @@ import com.urise.webapp.model.Resume;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class MainReflection {
@@ -18,7 +19,8 @@ public class MainReflection {
         // TODO: invoke r.toString via Reflection (вызвать метод toString через Рефлекшен)
         // В MainReflection вызовите у Resume, через отражение, метод toString. Выведите результат на консоль
 
-
+        Method method = resume.getClass().getMethod("toString");
+        System.out.println(method.invoke(resume));
     }
 }
 
