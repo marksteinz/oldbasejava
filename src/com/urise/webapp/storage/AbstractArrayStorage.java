@@ -1,8 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -21,14 +18,16 @@ public abstract class AbstractArrayStorage implements Storage {
         String uuid = resume.getUuid();
         int index = findElementIndex(uuid);
         if (size >= storage.length) {
-            throw new StorageException("Error: overflow storage", uuid);
+            System.out.println("Error: overflow storage");
+            return;
         }
         if (uuid == null) {
             System.out.println("Error: null uuid");
             return;
         }
         if (index >= 0) {
-            throw new ExistStorageException(uuid);
+            System.out.println("Error: " + uuid + " not unique resume");
+            return;
         }
         insertElementIndex(resume, index);
         size++;
@@ -45,17 +44,17 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             storage[index] = resume;
         } else {
-            throw new NotExistStorageException(uuid);
+            System.out.println("Error: " + uuid + " not found");
         }
     }
 
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
         if (index >= 0) {
-            deleteElementIndex(index);
+            if (size - 1 - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
             size--;
         } else {
-            throw new NotExistStorageException(uuid);
+            System.out.println("Error: " + uuid + " not found");
         }
     }
 
@@ -68,10 +67,11 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             return storage[index];
         }
-        throw new NotExistStorageException(uuid);
+        System.out.println("Error: " + uuid + " not found");
+        return null;
     }
 
-    protected abstract void deleteElementIndex(int index);
+//    protected abstract void deleteElementIndex(Resume resume, int index);
 
     protected abstract void insertElementIndex(Resume resume, int index);
 
