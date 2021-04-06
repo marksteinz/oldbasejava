@@ -4,7 +4,12 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage{
+public class SortedArrayStorage extends AbstractArrayStorage {
+
+    @Override
+    protected void deleteElementIndex(int index) {
+        if (size - 1 - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
+    }
 
     @Override
     protected void insertElementIndex(Resume resume, int index) {
@@ -15,8 +20,7 @@ public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
     protected int findElementIndex(String uuid) {
-        Resume searchKey = new Resume();
-        searchKey.setUuid(uuid);
-        return Arrays.binarySearch(storage, 0 , size, searchKey);
+        Resume searchKey = new Resume(uuid);
+        return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 }

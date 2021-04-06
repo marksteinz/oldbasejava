@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -17,17 +20,15 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume resume) {
         String uuid = resume.getUuid();
         int index = findElementIndex(uuid);
-        if (size >= storage.length) {
-            System.out.println("Error: overflow storage");
-            return;
+        if (size >= STORAGE_LIMIT) {
+            throw new StorageException("Error: overflow storage", uuid);
         }
         if (uuid == null) {
             System.out.println("Error: null uuid");
             return;
         }
         if (index >= 0) {
-            System.out.println("Error: " + uuid + " not unique resume");
-            return;
+            throw new ExistStorageException(uuid);
         }
         insertElementIndex(resume, index);
         size++;
@@ -44,17 +45,17 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             storage[index] = resume;
         } else {
-            System.out.println("Error: " + uuid + " not found");
+            throw new NotExistStorageException(uuid);
         }
     }
 
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
         if (index >= 0) {
-            if (size - 1 - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
+            deleteElementIndex(index);
             size--;
         } else {
-            System.out.println("Error: " + uuid + " not found");
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -67,11 +68,10 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             return storage[index];
         }
-        System.out.println("Error: " + uuid + " not found");
-        return null;
+        throw new NotExistStorageException(uuid);
     }
 
-//    protected abstract void deleteElementIndex(Resume resume, int index);
+    protected abstract void deleteElementIndex(int index);
 
     protected abstract void insertElementIndex(Resume resume, int index);
 
