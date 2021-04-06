@@ -1,6 +1,6 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.ExistStorageException  ;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
@@ -41,14 +41,14 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void save() {
-        Resume resumeTest = new Resume(UUID_4);
-        storage.save(resumeTest);
-        assertSame(resumeTest, storage.get(UUID_4));
+        Resume newResume = new Resume(UUID_4);
+        storage.save(newResume);
+        assertSame(newResume, storage.get(UUID_4));
         assertSize(4);
     }
 
     @Test(expected = ExistStorageException.class)
-    public void getExist() {
+    public void  saveExistResume() {
         storage.save(resume1);
     }
 
@@ -60,9 +60,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() {
-        Resume resumeTest = new Resume(UUID_1);
-        storage.update(resumeTest);
-        assertSame(resumeTest, storage.get(UUID_1));
+        Resume newResume = new Resume(UUID_1);
+        storage.update(newResume);
+        assertSame(newResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -79,8 +79,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExist() {
-        storage.clear();
-        storage.delete(UUID_1);
+        storage.delete(UUID_4);
     }
 
     @Test
@@ -100,9 +99,9 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = StorageException.class)
-    public void stackOverflow() {
+    public void arrayOverflow() {
         try {
-            for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT+1; i++) {
+            for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {

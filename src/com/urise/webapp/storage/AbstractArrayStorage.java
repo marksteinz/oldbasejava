@@ -30,7 +30,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             throw new ExistStorageException(uuid);
         }
-        insertElementIndex(resume, index);
+        insertElement(resume, index);
         size++;
     }
 
@@ -52,7 +52,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
         if (index >= 0) {
-            deleteElementIndex(index);
+            deleteElement(index);
             size--;
         } else {
             throw new NotExistStorageException(uuid);
@@ -71,9 +71,9 @@ public abstract class AbstractArrayStorage implements Storage {
         throw new NotExistStorageException(uuid);
     }
 
-    protected abstract void deleteElementIndex(int index);
+    protected abstract void deleteElement(int index);
 
-    protected abstract void insertElementIndex(Resume resume, int index);
+    protected abstract void insertElement(Resume resume, int index);
 
     protected abstract int findElementIndex(String uuid);
 }
