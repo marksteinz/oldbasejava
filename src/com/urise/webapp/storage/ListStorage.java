@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
@@ -9,7 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    protected static final List<Resume> list = new ArrayList<>(3);
+    private static final List<Resume> list = new ArrayList<>();
+
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(list.toArray(new Resume[0]), 0, list.size());
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    public void clear() {
+        list.clear();
+    }
 
     @Override
     protected void deleteElement(int index) {
@@ -21,39 +31,17 @@ public class ListStorage extends AbstractStorage {
         list.set(index, resume);
     }
 
-    public void clear() {
-        list.clear();
-    }
-
-    public void save(Resume resume) {
-        String uuid = resume.getUuid();
-        int index = findElementIndex(uuid);
-        if (resume.getUuid() == null) {
-            System.out.println("Error: null uuid");
-            return;
-        }
-        if (index >= 0) {
-            throw new ExistStorageException(uuid);
-        }
+    @Override
+    protected void sameSave(Resume resume, int index, String uuid) {
         list.add(resume);
     }
 
-    public Resume get(String uuid) {
-        int index = findElementIndex(uuid);
-        if (index >= 0) {
-            return list.get(index);
-        }
-        throw new NotExistStorageException(uuid);
+    @Override
+    public Resume getElement(int index) {
+        return list.get(index);
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(list.toArray(new Resume[0]), 0, list.size());
-    }
-
-    public int size() {
-        return list.size();
-    }
-
+    @Override
     protected int findElementIndex(String uuid) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getUuid().equals(uuid)) {
@@ -61,5 +49,9 @@ public class ListStorage extends AbstractStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    protected void insertElement(Resume resume, int index) {
     }
 }

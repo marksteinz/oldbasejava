@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -13,9 +11,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected int size = 0;
 
+    public int size() {
+        return size;
+    }
+
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
+    }
+
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     @Override
@@ -23,40 +29,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         storage[index] = resume;
     }
 
-    public int size() {
-        return size;
-    }
-
-    public void save(Resume resume) {
-        String uuid = resume.getUuid();
-        int index = findElementIndex(uuid);
+    @Override
+    protected void sameSave(Resume resume, int index, String uuid) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Error: overflow storage", uuid);
-        }
-        if (uuid == null) {
-            System.out.println("Error: null uuid");
-            return;
-        }
-        if (index >= 0) {
-            throw new ExistStorageException(uuid);
         }
         insertElement(resume, index);
         size++;
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
-    }
-
-    public Resume get(String uuid) {
-        int index = findElementIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        }
-        throw new NotExistStorageException(uuid);
+    @Override
+    public Resume getElement(int index) {
+        return storage[index];
     }
 
     protected abstract void deleteElement(int index);
-
-    protected abstract void insertElement(Resume resume, int index);
 }
