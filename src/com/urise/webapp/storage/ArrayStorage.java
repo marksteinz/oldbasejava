@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 /**
@@ -15,7 +16,11 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void insertElement(Resume resume, int index) {
+        if (size >= STORAGE_LIMIT) {
+            throw new StorageException("Error: overflow storage", resume.getUuid());
+        }
         storage[size] = resume;
+        size++;
     }
 
     @Override

@@ -9,14 +9,14 @@ public abstract class AbstractStorage implements Storage {
     public void save(Resume resume) {
         String uuid = resume.getUuid();
         int index = findElementIndex(uuid);
-        if (resume.getUuid() == null) {
+        if (uuid == null) {
             System.out.println("Error: null uuid");
             return;
         }
         if (index >= 0) {
             throw new ExistStorageException(uuid);
         }
-        sameSave(resume, index, uuid);
+        insertElement(resume, index);
     }
 
     public Resume get(String uuid) {
@@ -47,8 +47,6 @@ public abstract class AbstractStorage implements Storage {
     }
 
     protected abstract Resume getElement(int index);
-
-    protected abstract void sameSave(Resume resume, int index, String uuid);
 
     protected abstract void insertElement(Resume resume, int index);
 

@@ -10,7 +10,7 @@ public class ListStorage extends AbstractStorage {
     private static final List<Resume> list = new ArrayList<>();
 
     public Resume[] getAll() {
-        return Arrays.copyOfRange(list.toArray(new Resume[0]), 0, list.size());
+        return list.toArray(new Resume[0]);
     }
 
     public int size() {
@@ -32,7 +32,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void sameSave(Resume resume, int index, String uuid) {
+    protected void insertElement(Resume resume, int index) {
         list.add(resume);
     }
 
@@ -49,9 +49,5 @@ public class ListStorage extends AbstractStorage {
             }
         }
         return -1;
-    }
-
-    @Override
-    protected void insertElement(Resume resume, int index) {
     }
 }

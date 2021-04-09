@@ -30,18 +30,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void sameSave(Resume resume, int index, String uuid) {
-        if (size >= STORAGE_LIMIT) {
-            throw new StorageException("Error: overflow storage", uuid);
-        }
-        insertElement(resume, index);
-        size++;
-    }
-
-    @Override
     public Resume getElement(int index) {
         return storage[index];
     }
-
-    protected abstract void deleteElement(int index);
 }
