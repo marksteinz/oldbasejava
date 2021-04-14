@@ -8,51 +8,51 @@ public abstract class AbstractStorage implements Storage {
 
     public void save(Resume resume) {
         String uuid = resume.getUuid();
-        int index = findElementIndex(uuid);
         if (uuid == null) {
             System.out.println("Error: null uuid");
             return;
         }
-        if (index >= 0) {
-            throw new ExistStorageException(uuid);
-        }
-        insertElement(resume, index);
+        saveSame(resume, getNotExistKey(uuid));
     }
 
     public Resume get(String uuid) {
-        int index = findElementIndex(uuid);
-        if (index >= 0) {
-            return getElement(index);
-        }
-        throw new NotExistStorageException(uuid);
+        return getElement(getExistKey(uuid));
     }
 
     public void delete(String uuid) {
-        int index = findElementIndex(uuid);
-        if (index >= 0) {
-            deleteElement(index);
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+        deleteElement(getExistKey(uuid));
     }
 
     public void update(Resume resume) {
         String uuid = resume.getUuid();
-        int index = findElementIndex(uuid);
-        if (index >= 0) {
-            updateElement(resume, index);
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+        updateElement(resume, getExistKey(uuid));
     }
 
-    protected abstract Resume getElement(int index);
+    private Object getExistKey(String uuid){
+        Object key = findElementKey(uuid);
+        if (checkKey(key)) {
+            return key;
+        }
+        throw new NotExistStorageException(uuid);
+    }
 
-    protected abstract void insertElement(Resume resume, int index);
+    private Object getNotExistKey(String uuid){
+        Object key = findElementKey(uuid);
+        if (!checkKey(key)) {
+            return key;
+        }
+        throw new ExistStorageException(uuid);
+    }
 
-    protected abstract void updateElement(Resume resume, int index);
+    protected abstract Boolean checkKey(Object key);
 
-    protected abstract void deleteElement(int index);
+    protected abstract Resume getElement(Object key);
 
-    protected abstract int findElementIndex(String uuid);
+    protected abstract void saveSame(Resume resume, Object index);
+
+    protected abstract void updateElement(Resume resume, Object index);
+
+    protected abstract void deleteElement(Object index);
+
+    protected abstract Object findElementKey(String uuid);
 }

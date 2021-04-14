@@ -9,22 +9,17 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void deleteElement(int index) {
+    protected void deleteArrayElement(int index) {
         storage[index] = storage[size - 1];
-        size--;
     }
 
     @Override
     protected void insertElement(Resume resume, int index) {
-        if (size >= STORAGE_LIMIT) {
-            throw new StorageException("Error: overflow storage", resume.getUuid());
-        }
         storage[size] = resume;
-        size++;
     }
 
     @Override
-    protected int findElementIndex(String uuid) {
+    protected Object findElementKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
