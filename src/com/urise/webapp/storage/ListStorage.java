@@ -6,49 +6,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    private static final List<Resume> list = new ArrayList<>();
+    private static final List<Resume> LIST_STORAGE = new ArrayList<>();
 
     public Resume[] getAll() {
-        return list.toArray(new Resume[0]);
+        return LIST_STORAGE.toArray(new Resume[0]);
     }
 
     public int size() {
-        return list.size();
+        return LIST_STORAGE.size();
     }
 
     public void clear() {
-        list.clear();
+        LIST_STORAGE.clear();
     }
 
     @Override
     protected void deleteElement(Object index) {
-        list.remove((int) index);
+        LIST_STORAGE.remove((int) index);
     }
 
     @Override
     protected void updateElement(Resume resume, Object index) {
-        list.set((int) index, resume);
+        LIST_STORAGE.set((int) index, resume);
     }
 
     @Override
-    protected void saveSame(Resume resume, Object index) {
-        list.add(resume);
+    protected void saveElement(Resume resume, Object index) {
+        LIST_STORAGE.add(resume);
     }
 
     @Override
-    protected Boolean checkKey(Object key) {
+    protected Boolean isExist(Object key) {
         return key != null;
     }
 
     @Override
     public Resume getElement(Object index) {
-        return list.get((int) index);
+        return LIST_STORAGE.get((int) index);
     }
 
     @Override
     protected Object findElementKey(String uuid) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getUuid().equals(uuid)) {
+        for (int i = 0; i < LIST_STORAGE.size(); i++) {
+            if (LIST_STORAGE.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }

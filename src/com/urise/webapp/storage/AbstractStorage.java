@@ -6,14 +6,18 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    public void save(Resume resume) {
-        String uuid = resume.getUuid();
-        if (uuid == null) {
-            System.out.println("Error: null uuid");
-            return;
-        }
-        saveSame(resume, getNotExistKey(uuid));
-    }
+    protected abstract Object findElementKey(String uuid);
+
+    protected abstract Boolean isExist(Object key);
+
+    protected abstract Resume getElement(Object key);
+
+    protected abstract void saveElement(Resume resume, Object index);
+
+    protected abstract void updateElement(Resume resume, Object index);
+
+    protected abstract void deleteElement(Object index);
+
 
     public Resume get(String uuid) {
         return getElement(getExistKey(uuid));
@@ -23,6 +27,15 @@ public abstract class AbstractStorage implements Storage {
         deleteElement(getExistKey(uuid));
     }
 
+    public void save(Resume resume) {
+        String uuid = resume.getUuid();
+        if (uuid == null) {
+            System.out.println("Error: null uuid");
+            return;
+        }
+        saveElement(resume, getNotExistKey(uuid));
+    }
+
     public void update(Resume resume) {
         String uuid = resume.getUuid();
         updateElement(resume, getExistKey(uuid));
@@ -30,7 +43,7 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getExistKey(String uuid){
         Object key = findElementKey(uuid);
-        if (checkKey(key)) {
+        if (isExist(key)) {
             return key;
         }
         throw new NotExistStorageException(uuid);
@@ -38,21 +51,9 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getNotExistKey(String uuid){
         Object key = findElementKey(uuid);
-        if (!checkKey(key)) {
+        if (!isExist(key)) {
             return key;
         }
         throw new ExistStorageException(uuid);
     }
-
-    protected abstract Boolean checkKey(Object key);
-
-    protected abstract Resume getElement(Object key);
-
-    protected abstract void saveSame(Resume resume, Object index);
-
-    protected abstract void updateElement(Resume resume, Object index);
-
-    protected abstract void deleteElement(Object index);
-
-    protected abstract Object findElementKey(String uuid);
 }

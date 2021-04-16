@@ -3,55 +3,52 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MapStorage extends AbstractStorage{
-    Map<String, Resume> map = new HashMap<>();
+    private static final Map<String, Resume> MAP_STORAGE = new LinkedHashMap<>();
 
     @Override
-    protected Boolean checkKey(Object key) {
+    protected Boolean isExist(Object key) {
         return key != null;
     }
 
     @Override
     protected Resume getElement(Object key) {
-        return map.get(key);
+        return MAP_STORAGE.get(key);
     }
 
     @Override
-    protected void saveSame(Resume resume, Object index) {
-        map.put(resume.getUuid(), resume);
+    protected void saveElement(Resume resume, Object index) {
+        MAP_STORAGE.put(resume.getUuid(), resume);
     }
 
     @Override
     protected void updateElement(Resume resume, Object index) {
-        map.replace((String) index, resume);
+        MAP_STORAGE.replace((String) index, resume);
     }
 
     @Override
     protected void deleteElement(Object index) {
-        map.remove(index);
+        MAP_STORAGE.remove(index);
     }
 
     @Override
     protected Object findElementKey(String uuid) {
-        if (map.containsKey(uuid))
-            return uuid;
-        return null;
+        return MAP_STORAGE.containsKey(uuid) ? uuid : null;
     }
 
     @Override
     public void clear() {
-        map.clear();
+        MAP_STORAGE.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return map.values().toArray(new Resume[0]);
+        return MAP_STORAGE.values().toArray(new Resume[0]);
     }
 
     @Override
     public int size() {
-        return map.size();
+        return MAP_STORAGE.size();
     }
 }
