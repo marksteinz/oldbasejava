@@ -42,17 +42,17 @@ public abstract class AbstractStorage implements Storage {
     }
 
     private Object getExistKey(String uuid){
-        Object key = findElementKey(uuid);
-        if (isExist(key)) {
-            return key;
+        Object Index = findElementKey(uuid);
+        if (isExist(Index)) {
+            return Index;
         }
         throw new NotExistStorageException(uuid);
     }
 
     private Object getNotExistKey(String uuid){
-        Object key = findElementKey(uuid);
-        if (!isExist(key)) {
-            return key;
+        Object Index = findElementKey(uuid);
+        if (!isExist(Index)) {
+            return Index;
         }
         throw new ExistStorageException(uuid);
     }
