@@ -8,8 +8,8 @@ import java.util.List;
 public class ListStorage extends AbstractStorage {
     private static final List<Resume> LIST_STORAGE = new ArrayList<>();
 
-    public Resume[] getAll() {
-        return LIST_STORAGE.toArray(new Resume[0]);
+    public List<Resume> doCopyAll() {
+        return new ArrayList<>(LIST_STORAGE);
     }
 
     public int size() {

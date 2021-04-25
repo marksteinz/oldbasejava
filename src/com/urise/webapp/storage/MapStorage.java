@@ -5,11 +5,11 @@ import com.urise.webapp.model.Resume;
 import java.util.*;
 
 public class MapStorage extends AbstractStorage{
-    private static final Map<String, Resume> MAP_STORAGE = new LinkedHashMap<>();
+    private static final Map<String, Resume> MAP_STORAGE = new HashMap<>();
 
     @Override
     protected Boolean isExist(Object key) {
-        return key != null;
+        return MAP_STORAGE.containsKey(key);
     }
 
     @Override
@@ -33,18 +33,18 @@ public class MapStorage extends AbstractStorage{
     }
 
     @Override
-    protected Object findElementKey(String uuid) {
-        return MAP_STORAGE.containsKey(uuid) ? uuid : null;
+    protected List<Resume> doCopyAll() {
+        return new ArrayList<>(MAP_STORAGE.values());
+    }
+
+    @Override
+    protected String findElementKey(String uuid) {
+        return uuid;
     }
 
     @Override
     public void clear() {
         MAP_STORAGE.clear();
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return MAP_STORAGE.values().toArray(new Resume[0]);
     }
 
     @Override
