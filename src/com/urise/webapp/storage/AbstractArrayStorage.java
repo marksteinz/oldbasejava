@@ -50,7 +50,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public Boolean isExist(Object key) {
+    public boolean isExist(Object key) {
         return (int) key >= 0;
     }
 

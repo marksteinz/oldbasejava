@@ -36,7 +36,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Boolean isExist(Object key) {
+    protected boolean isExist(Object key) {
         return key != null;
     }
 

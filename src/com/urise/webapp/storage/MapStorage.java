@@ -8,7 +8,7 @@ public class MapStorage extends AbstractStorage{
     private static final Map<String, Resume> MAP_STORAGE = new HashMap<>();
 
     @Override
-    protected Boolean isExist(Object key) {
+    protected boolean isExist(Object key) {
         return MAP_STORAGE.containsKey(key);
     }
 
