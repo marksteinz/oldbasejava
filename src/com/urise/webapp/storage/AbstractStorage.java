@@ -7,19 +7,19 @@ import com.urise.webapp.model.Resume;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<FK> implements Storage {
 
-    protected abstract Object findElementKey(String uuid);
+    protected abstract FK findElementKey(String uuid);
 
-    protected abstract boolean isExist(Object key);
+    protected abstract boolean isExist(FK key);
 
-    protected abstract Resume getElement(Object key);
+    protected abstract Resume getElement(FK key);
 
-    protected abstract void saveElement(Resume resume, Object index);
+    protected abstract void saveElement(Resume resume, FK index);
 
-    protected abstract void updateElement(Resume resume, Object index);
+    protected abstract void updateElement(Resume resume, FK index);
 
-    protected abstract void deleteElement(Object index);
+    protected abstract void deleteElement(FK index);
 
     protected abstract List<Resume> doCopyAll();
 
@@ -42,16 +42,16 @@ public abstract class AbstractStorage implements Storage {
         updateElement(resume, getExistKey(uuid));
     }
 
-    private Object getExistKey(String uuid){
-        Object key = findElementKey(uuid);
+    private FK getExistKey(String uuid){
+        FK key = findElementKey(uuid);
         if (isExist(key)) {
             return key;
         }
         throw new NotExistStorageException(uuid);
     }
 
-    private Object getNotExistKey(String uuid){
-        Object key = findElementKey(uuid);
+    private FK getNotExistKey(String uuid){
+        FK key = findElementKey(uuid);
         if (!isExist(key)) {
             return key;
         }
