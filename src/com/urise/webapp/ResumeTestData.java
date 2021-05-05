@@ -7,6 +7,7 @@ public class ResumeTestData {
         Resume resume = new Resume("name");
         TextSection text = new TextSection("qwe");
 
+        resume.addContact(ContactType.PHONE, "+7911");
         resume.addContact(ContactType.SKYPE, "gg");
         resume.addSection(SectionType.EDUCATION, text);
 
