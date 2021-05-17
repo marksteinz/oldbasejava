@@ -15,9 +15,10 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("C:\\projects\\storage");
+    protected static final File STORAGE_DIR = new File("E:\\storage\\test");
 
     protected Storage storage;
+
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
@@ -84,7 +85,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void save() {
         storage.save(R4);
-        assertSame(R4, storage.get(UUID_4));
+        assertGet(R4);
         assertSize(4);
     }
 
@@ -103,7 +104,7 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume newResume = new Resume(UUID_1, "New Name");
         storage.update(newResume);
-        assertSame(newResume, storage.get(UUID_1));
+        assertTrue(newResume.equals(storage.get(UUID_1)));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -131,7 +132,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        assertSame(R1, storage.get(UUID_1));
+        assertGet(R1);
+        assertGet(R2);
+        assertGet(R3);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -141,5 +144,9 @@ public abstract class AbstractStorageTest {
 
     private void assertSize(int size) {
         assertEquals(size, storage.size());
+    }
+
+    private void assertGet(Resume resume) {
+        assertEquals(resume, storage.get(resume.getUuid()));
     }
 }
